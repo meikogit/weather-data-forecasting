@@ -28,15 +28,15 @@ Die Frage öffnet möglichkeiten zu weiteren Forschungsfragen, wie "Verbessert e
 <!-- Hier die Zahlen aus deiner Tabelle eintragen (Spalten "F1 Score" und "Persistence F1").
      Nur ein paar Horizonte reichen, z. B. 1, 3, 6, 12, 24 Stunden. -->
 
-| Horizont | F1 Modell | F1 Persistenz | Brier Modell | Brier Persistence |
-| 1 h      |   [0.74]  |     [0.74]    |    [0.078]   |      [0.097]      |
-| 3 h      |   [0.57]  |     [0.56]    |    [0.111]   |      [0.165]      |
-| 6 h      |   [0.54]  |     [0.44]    |    [0.125]   |      [0.210]      |
-| 12 h     |   [0.42]  |     [0.34]    |    [0.134]   |      [0.248]      |
-| 24 h     |   [0.32]  |     [0.27]    |    [0.143]   |      [0.273]      |
+| Horizont | F1 Modell | F1 Persistenz | Brier Modell | Brier Persistence | Onset Recall
+| 1 h      |   [0.74]  |     [0.74]    |    [0.078]   |      [0.097]      |    [0.01]
+| 3 h      |   [0.57]  |     [0.56]    |    [0.111]   |      [0.165]      |    [0.17]
+| 6 h      |   [0.54]  |     [0.44]    |    [0.125]   |      [0.210]      |    [0.29]
+| 12 h     |   [0.42]  |     [0.34]    |    [0.134]   |      [0.248]      |    [0.31]
+| 24 h     |   [0.32]  |     [0.27]    |    [0.143]   |      [0.273]      |    [0.20]
 
 **Antwort auf die Forschungsfrage:**
-Die Ergebnisse zeigen, dass unser Modell bei einer und drei Stunden noch keinen Signifikanten unterschied zu dem baseline Modell vorbringt. Erst ab ca. sechs Stunden hat das Modell einen leichten Vorteil erkennbar durch den höheren F1-Score. Der Brier-Score hingegen zeigt, dass in hinsicht auf Fehler des Modells schon ab Stunde 1 ein Vorteil gegenüber der Baseline besteht, welcher sich bei größeren Horizonten noch weiter Ausbaut.
+Die Ergebnisse zeigen, dass unser Modell bei einer und drei Stunden noch keinen Signifikanten unterschied zu dem baseline Modell vorbringt. Erst ab ca. sechs Stunden hat das Modell einen leichten Vorteil erkennbar durch den höheren F1-Score. Der Brier-Score hingegen zeigt, dass in hinsicht auf Fehler des Modells schon ab Stunde 1 ein Vorteil gegenüber der Baseline besteht, welcher sich bei größeren Horizonten noch weiter Ausbaut. Interessant ist der Onset Recall, welcher zeigt wie viele Regenstunden, in welchen es die jeweilige Stundenanzahl vorher nicht geregnet hat, das Modell erkennt. Bei der Baseline sind das nach Definition 0. Das Modell hingegen zeigt einen Peak bei dem 8 Stunden Horizont mit 31%. 
 
 ## Grenzen
 
@@ -48,7 +48,7 @@ Die Ergebnisse zeigen, dass unser Modell bei einer und drei Stunden noch keinen 
 
 - Klimatologie als zweite Baseline (durchschnittliche Regenwahrscheinlichkeit pro Monat und Uhrzeit)
 - Nichtlineares Modell (z. B. Gradient Boosting) im Vergleich
-- Messwerte von Nachbarstationen als zusätzliche Features
+- Messwerte von Nachbarstationen als zusätzliche Features, kombinierbar mit Windrichtung um Regenwahrscheinlichkeiten der Stationen zu gewichten
 
 ## Projekt starten
 
