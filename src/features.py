@@ -12,6 +12,7 @@ def create_features(
     features_dict["Temperature"] = data["Temperature"]
     features_dict["d_NormalisedPressure_3h"] = data["NormalisedPressure"].diff(3)
     features_dict["NormalisedPressure"] = data["NormalisedPressure"]
+    features_dict["RelativeHumidity"] = data["RelativeHumidity"]
     features_dict["d_RelativeHumidity_3h"] = data["RelativeHumidity"].diff(3)
     features_dict["DegOfCloudiness"] = data["DegOfCloudiness"]
     features_dict["MeanWindVeloc"] = data["MeanWindVeloc"]

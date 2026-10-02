@@ -53,7 +53,7 @@ def main():
     #Features
     features = ['DewPointSpread', 'd_Temperature_3h', 'Temperature',
        'd_NormalisedPressure_3h', 'NormalisedPressure',
-       'd_RelativeHumidity_3h', 'RelativeHumidity', 'DegOfCloudiness',
+       'd_RelativeHumidity_3h', 'DegOfCloudiness',
        'MeanWindVeloc', 'PrecipIndicator', 'Season_H',
        'Season_W', "d_DewPointSpread_3h", "RollingDewPointSpread"]
     df_features = create_features(data)
