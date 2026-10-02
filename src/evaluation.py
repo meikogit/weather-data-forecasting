@@ -8,7 +8,7 @@ def evaluate(
         indicator: pd.Series,
         threshold: int,
         model,
-)->dict:
+    )->dict:
     evaluation = {}
     data_model = pd.concat(
     [data, indicator.rename("target")],
