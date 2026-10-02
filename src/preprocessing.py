@@ -215,21 +215,52 @@ def clean_n(
         df.drop("V_N_I", axis = 1, inplace = True)
     return df  
 
-def concat_columns(
-        dfs: dict 
+def merge_files(
+        dfs: list[pd.DataFrame]
 ) -> pd.DataFrame:
-    station_ids = [
+    """
+    Puts several files of the SAME variable (e.g. historical + recent
+    temperature file) below each other into one DataFrame.
+
+    The files overlap in time, so some hours exist twice. For those we keep
+    the first one. The list must be sorted from oldest to newest file, so
+    the older (quality-checked) file wins over the newer (preliminary) one.
+    """
+    df = pd.concat(dfs)
+    # kind="stable": rows with the same time stay in their original order,
+    # otherwise "keep first" could pick the wrong copy.
+    df = df.sort_index(kind="stable")
+    df = df[~df.index.duplicated(keep="first")]
+    return df
+
+
+def concat_columns(
+        dfs: dict
+) -> pd.DataFrame:
+    """
+    Puts the DataFrames of the different variables next to each other
+    (one column block per variable), matched by their time index.
+    """
+    station_ids = {
        df["StationID"].iloc[0]
-       for df in dfs.values() 
-    ]
-    if len(set(station_ids)) == 1:
-        df_all = pd.concat(
-            dfs.values(),
-            axis=1,
-            join="outer"
-        )
-    else:
+       for df in dfs.values()
+    }
+    if len(station_ids) != 1:
         raise ValueError("StationID is not the same in all DataFrames.")
+
+    # StationID and MESS_DATUM are in every DataFrame. If we kept them, the
+    # result would contain each of these columns several times. The time is
+    # already the index, so we drop them and add StationID once.
+    dfs_without_ids = [
+        df.drop(columns = ["StationID", "MESS_DATUM"])
+        for df in dfs.values()
+    ]
+    df_all = pd.concat(
+        dfs_without_ids,
+        axis=1,
+        join="outer"
+    )
+    df_all.insert(0, "StationID", station_ids.pop())
     return df_all
 
 

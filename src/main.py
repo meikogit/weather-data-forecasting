@@ -1,26 +1,24 @@
-from data_loader import load_data
-from features import create_features
-from evaluation import evaluate
-from logistic_model import logistic_reg
+from src.config import RAW_DIR, RESULTS_DIR, HORIZONS
+from src.data_loader import load_data, group_files_by_variable
+from src.features import create_features
+from src.evaluation import evaluate
+from src.logistic_model import logistic_reg
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-import preprocessing 
-from pathlib import Path
+from src import preprocessing
 
 def main():
 
-    #Load Data
-    filepaths = list(Path("data/raw").glob("*"))
-    filepaths
+    #Load and Preprocess Data
+    #One variable (e.g. "tu") can consist of several files (historical + recent).
+    #Each file is processed on its own, then the files of one variable are merged.
     dfs = {}
-    for path in filepaths:
-        name = path.stem.split("produkt_")[1].split("_stunde")[0]
-        dfs[name] = load_data(path)
+    for name, paths in group_files_by_variable(RAW_DIR).items():
+        parts = [preprocessing.process_df(load_data(path)) for path in paths]
+        dfs[name] = preprocessing.merge_files(parts)
 
-    #Preprocess Data
-    for key, df in dfs.items():
-        dfs[key] = preprocessing.process_df(df)
+    #Clean the column names of each variable
     dfs["tu"] = preprocessing.clean_tu(dfs["tu"])
     dfs["p0"] = preprocessing.clean_p0(dfs["p0"])
     dfs["ff"] = preprocessing.clean_ff(dfs["ff"])
@@ -57,7 +55,7 @@ def main():
        'MeanWindVeloc', 'PrecipIndicator', 'Season_H',
        'Season_W', "d_DewPointSpread_3h", "RollingDewPointSpread"]
     df_features = create_features(data)
-    forecast_hours = [1, 2, 3, 4, 5, 6, 8, 12, 14, 16, 18, 24]
+    forecast_hours = HORIZONS
     results = []
     p_pred = {}
     thresholds = {
@@ -96,13 +94,14 @@ def main():
         p_pred[hours] = evaluation["p_pred"]
         
     results_df = pd.DataFrame(results)
-    with open("data/results/results_logistic_reg.txt", "w") as file:
+    RESULTS_DIR.mkdir(parents = True, exist_ok = True)
+    with open(RESULTS_DIR / "results_logistic_reg.txt", "w") as file:
         file.write("LOGISTIC REGRESSION - FORECAST HORIZON EVALUATION\n")
         file.write("=" * 70 + "\n\n")
         file.write("Model: Logistic Regression\n")
         file.write("Training period: 2000-2020\n")
         file.write("Test period: 2021-present\n")
-        file.write("Threshold: 0.3\n\n")
+        file.write(f"Thresholds per horizon (hours: threshold): {thresholds}\n\n")
         file.write("Features:\n")
         for feature in features:
             file.write(f"  - {feature}\n")
