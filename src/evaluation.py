@@ -1,6 +1,6 @@
 import statsmodels.api as sm 
 import pandas as pd
-from sklearn.metrics import confusion_matrix, roc_auc_score
+from sklearn.metrics import confusion_matrix, roc_auc_score, accuracy_score, f1_score
 
 
 def evaluate(
@@ -38,10 +38,7 @@ def evaluate(
     rain_recall = TP / (TP + FN)
     rain_precision = TP / (TP + FP)
 
-    f1 = (
-        2 * rain_precision * rain_recall /
-        (rain_precision + rain_recall)
-    )
+    f1 = f1_score(y_test, y_pred)
 
     evaluation["Summary"] = model.summary()
     evaluation["Accuracy"] = accuracy
@@ -53,4 +50,21 @@ def evaluate(
     evaluation["ROC-AUC"] = roc_auc_score(y_test, p_pred)
     evaluation["p_pred"] = p_pred
     evaluation["ConfusionMatrix"] = matrix
-    return evaluation
+    return evaluation 
+
+
+def evaluate_predictions(
+        y_true: pd.Series,
+        y_pred: pd.Series,
+) -> dict:
+    """
+    Scores a 0/1 forecast against what really happened.
+    Works for every forecast.
+    """
+
+    f1 = f1_score(y_true, y_pred)
+    
+    return {
+        "Accuracy": accuracy_score(y_true, y_pred),
+        "F1 Score": f1,
+    }

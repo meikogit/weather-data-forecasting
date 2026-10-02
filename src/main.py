@@ -1,4 +1,4 @@
-from src.config import RAW_DIR, RESULTS_DIR, HORIZONS
+from src.config import RAW_DIR, RESULTS_DIR, HORIZONS, THRESHOLD
 from src.data_loader import load_data, group_files_by_variable
 from src.features import create_features
 from src.evaluation import evaluate
@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from src import preprocessing
+from src.baselines import persistence
+from src.evaluation import evaluate_predictions
 
 def main():
 
@@ -58,38 +60,31 @@ def main():
     forecast_hours = HORIZONS
     results = []
     p_pred = {}
-    thresholds = {
-        "1": 0.4,
-        "2": 0.4,
-        "3": 0.4,
-        "4": 0.4,
-        "5": 0.3,
-        "6": 0.3,
-        "8": 0.2,
-        "12": 0.2,
-        "14": 0.2,
-        "16": 0.2,
-        "18": 0.2,
-        "24": 0.2
-    }
+    
     for hours in forecast_hours:
-        threshold = thresholds[str(hours)]
         n = hours
         indicator_nh = data["PrecipIndicator"].shift(-n)
 
         #Logistic Regression
         logit_model = logistic_reg(data = df_features, indicator = indicator_nh, features = features )
     
-        #Evaluation
-        evaluation = evaluate(data = df_features[features], indicator = indicator_nh, threshold = threshold, model = logit_model)
+                #Evaluation
+        evaluation = evaluate(data = df_features[features], indicator = indicator_nh, threshold = THRESHOLD, model = logit_model)
+
+        #Persistence baseline 
+        test_index = evaluation["p_pred"].index
+        persistence_scores = evaluate_predictions(
+            y_true = indicator_nh.loc[test_index],
+            y_pred = persistence(data).loc[test_index],
+        )
 
         results.append({
         "Hours": hours,
         "ROC-AUC": evaluation["ROC-AUC"],
-        "Missed Rain": evaluation["MissedRain"],
-        "False Rain": evaluation["FalseRain"],
         "Accuracy": evaluation["Accuracy"],
-        "F1 Score": evaluation["F1_Score"]
+        "F1 Score": evaluation["F1_Score"],
+        "Persistence Accuracy": persistence_scores["Accuracy"],
+        "Persistence F1": persistence_scores["F1 Score"],
         })
         p_pred[hours] = evaluation["p_pred"]
         
@@ -101,7 +96,7 @@ def main():
         file.write("Model: Logistic Regression\n")
         file.write("Training period: 2000-2020\n")
         file.write("Test period: 2021-present\n")
-        file.write(f"Thresholds per horizon (hours: threshold): {thresholds}\n\n")
+        file.write(f"Threshold: THRESHOLD \n\n")
         file.write("Features:\n")
         for feature in features:
             file.write(f"  - {feature}\n")
