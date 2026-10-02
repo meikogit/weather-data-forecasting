@@ -28,17 +28,15 @@ Die Frage öffnet möglichkeiten zu weiteren Forschungsfragen, wie "Verbessert e
 <!-- Hier die Zahlen aus deiner Tabelle eintragen (Spalten "F1 Score" und "Persistence F1").
      Nur ein paar Horizonte reichen, z. B. 1, 3, 6, 12, 24 Stunden. -->
 
-| Horizont | F1 Modell | F1 Persistenz |
-|---|---|---|
-| 1 h | [ ] | [ ] |
-| 3 h | [ ] | [ ] |
-| 6 h | [ ] | [ ] |
-| 12 h | [ ] | [ ] |
-| 24 h | [ ] | [ ] |
+| Horizont | F1 Modell | F1 Persistenz | Brier Modell | Brier Persistence |
+| 1 h      |   [0.74]  |     [0.74]    |    [0.078]   |      [0.097]      |
+| 3 h      |   [0.57]  |     [0.56]    |    [0.111]   |      [0.165]      |
+| 6 h      |   [0.54]  |     [0.44]    |    [0.125]   |      [0.210]      |
+| 12 h     |   [0.42]  |     [0.34]    |    [0.134]   |      [0.248]      |
+| 24 h     |   [0.32]  |     [0.27]    |    [0.143]   |      [0.273]      |
 
 **Antwort auf die Forschungsfrage:**
-<!-- 2-3 Sätze in deinen Worten. Zum Beispiel: "Für die nächsten 1 bis 3 Stunden ist das Modell kaum besser als die Persistenz, weil Regen meist einfach weitergeht. Ab etwa 6 Stunden ist das Modell deutlich besser, weil es Veränderungen wie fallenden Luftdruck erkennt." -->
-[Deine Antwort]
+Die Ergebnisse zeigen, dass unser Modell bei einer und drei Stunden noch keinen Signifikanten unterschied zu dem baseline Modell vorbringt. Erst ab ca. sechs Stunden hat das Modell einen leichten Vorteil erkennbar durch den höheren F1-Score. Der Brier-Score hingegen zeigt, dass in hinsicht auf Fehler des Modells schon ab Stunde 1 ein Vorteil gegenüber der Baseline besteht, welcher sich bei größeren Horizonten noch weiter Ausbaut.
 
 ## Grenzen
 

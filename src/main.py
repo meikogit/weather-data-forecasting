@@ -5,8 +5,8 @@ from src.evaluation import evaluate
 from src.logistic_model import logistic_reg
 import pandas as pd
 from src import preprocessing
-from src.baselines import persistence
-from src.evaluation import evaluate_predictions
+from src.baseline import persistence
+from src.evaluation import evaluate_predictions, onset_recall
 
 def main():
 
@@ -75,14 +75,25 @@ def main():
             y_true = indicator_nh.loc[test_index],
             y_pred = persistence(data).loc[test_index],
         )
+    
+        #Rain onsets: how many rain starts does the model predict?
+        y_pred_model = (evaluation["p_pred"] >= THRESHOLD).astype(int)
+        model_onset_recall = onset_recall(
+            now = data["PrecipIndicator"].loc[test_index],
+            y_true = indicator_nh.loc[test_index],
+            y_pred = y_pred_model,
+        )
 
         results.append({
         "Hours": hours,
         "ROC-AUC": evaluation["ROC-AUC"],
         "Accuracy": evaluation["Accuracy"],
         "F1 Score": evaluation["F1_Score"],
+        "Brier": evaluation["Brier"],
         "Persistence Accuracy": persistence_scores["Accuracy"],
         "Persistence F1": persistence_scores["F1 Score"],
+        "Persistence Brier": persistence_scores["Brier"],
+        "Onset Recall": model_onset_recall
         })
         p_pred[hours] = evaluation["p_pred"]
         

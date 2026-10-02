@@ -7,3 +7,4 @@ def persistence(data: pd.DataFrame) -> pd.Series:
     Returns 1 for rain and 0 for no rain.
     """
     return data["PrecipIndicator"]
+
