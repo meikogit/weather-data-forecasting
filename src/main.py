@@ -1,10 +1,8 @@
 from src.config import RAW_DIR, RESULTS_DIR, HORIZONS, THRESHOLD
-from src.data_loader import load_data, group_files_by_variable
+from src.data_loader import load_data
 from src.features import create_features
 from src.evaluation import evaluate
 from src.logistic_model import logistic_reg
-import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
 from src import preprocessing
 from src.baselines import persistence
@@ -55,7 +53,7 @@ def main():
        'd_NormalisedPressure_3h', 'NormalisedPressure',
        'd_RelativeHumidity_3h', 'DegOfCloudiness',
        'MeanWindVeloc', 'PrecipIndicator', 'Season_H',
-       'Season_W', "Season_S", "Season_F" "d_DewPointSpread_3h", "RollingDewPointSpread"]
+       'Season_W', "Season_S", "Season_F", "d_DewPointSpread_3h", "RollingDewPointSpread"]
     df_features = create_features(data)
     forecast_hours = HORIZONS
     results = []
