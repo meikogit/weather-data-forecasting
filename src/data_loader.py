@@ -38,24 +38,3 @@ def load_data(
     return df
 
 
-def group_files_by_variable(
-    folder: str | Path,
-) -> dict[str, list[Path]]:
-    """
-    Finds all DWD hourly files in a folder and groups them by variable.
-
-    A file name looks like  produkt_tu_stunde_19560101_20251231_00164.txt
-    Here "tu" is the variable (temperature/humidity). DWD delivers newer
-    data in a second file for the same variable, so a variable can have
-    several files. They are sorted from oldest to newest (the start date is
-    part of the file name, so sorting by name sorts by time).
-    """
-    folder = Path(folder)
-    groups: dict[str, list[Path]] = {}
-    for path in sorted(folder.glob("produkt_*_stunde_*.txt")):
-        name = path.stem.split("produkt_")[1].split("_stunde")[0]
-        groups.setdefault(name, []).append(path)
-
-    if not groups:
-        raise FileNotFoundError(f"No DWD hourly files found in: {folder}")
-    return groups

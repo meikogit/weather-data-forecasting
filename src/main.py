@@ -1,22 +1,22 @@
-from src.config import RAW_DIR, RESULTS_DIR, HORIZONS
-from src.data_loader import load_data, group_files_by_variable
+from src.config import RAW_DIR, RESULTS_DIR, HORIZONS, THRESHOLD
+from src.data_loader import load_data
 from src.features import create_features
 from src.evaluation import evaluate
 from src.logistic_model import logistic_reg
-import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
 from src import preprocessing
+from src.baseline import persistence
+from src.evaluation import evaluate_predictions, onset_recall
 
 def main():
 
     #Load and Preprocess Data
-    #One variable (e.g. "tu") can consist of several files (historical + recent).
-    #Each file is processed on its own, then the files of one variable are merged.
+    
     dfs = {}
-    for name, paths in group_files_by_variable(RAW_DIR).items():
-        parts = [preprocessing.process_df(load_data(path)) for path in paths]
-        dfs[name] = preprocessing.merge_files(parts)
+
+    for path in RAW_DIR.glob("produkt_*_stunde_*.txt"):
+        name = path.stem.split("produkt_")[1].split("_stunde")[0]
+        dfs[name] = preprocessing.process_df(load_data(path))
 
     #Clean the column names of each variable
     dfs["tu"] = preprocessing.clean_tu(dfs["tu"])
@@ -51,45 +51,49 @@ def main():
     #Features
     features = ['DewPointSpread', 'd_Temperature_3h', 'Temperature',
        'd_NormalisedPressure_3h', 'NormalisedPressure',
-       'd_RelativeHumidity_3h', 'RelativeHumidity', 'DegOfCloudiness',
+       'd_RelativeHumidity_3h', 'DegOfCloudiness',
        'MeanWindVeloc', 'PrecipIndicator', 'Season_H',
-       'Season_W', "d_DewPointSpread_3h", "RollingDewPointSpread"]
+       'Season_W', "Season_S", "Season_F", "d_DewPointSpread_3h", "RollingDewPointSpread"]
     df_features = create_features(data)
     forecast_hours = HORIZONS
     results = []
     p_pred = {}
-    thresholds = {
-        "1": 0.4,
-        "2": 0.4,
-        "3": 0.4,
-        "4": 0.4,
-        "5": 0.3,
-        "6": 0.3,
-        "8": 0.2,
-        "12": 0.2,
-        "14": 0.2,
-        "16": 0.2,
-        "18": 0.2,
-        "24": 0.2
-    }
+    
     for hours in forecast_hours:
-        threshold = thresholds[str(hours)]
         n = hours
         indicator_nh = data["PrecipIndicator"].shift(-n)
 
         #Logistic Regression
         logit_model = logistic_reg(data = df_features, indicator = indicator_nh, features = features )
     
-        #Evaluation
-        evaluation = evaluate(data = df_features[features], indicator = indicator_nh, threshold = threshold, model = logit_model)
+                #Evaluation
+        evaluation = evaluate(data = df_features[features], indicator = indicator_nh, threshold = THRESHOLD, model = logit_model)
+
+        #Persistence baseline 
+        test_index = evaluation["p_pred"].index
+        persistence_scores = evaluate_predictions(
+            y_true = indicator_nh.loc[test_index],
+            y_pred = persistence(data).loc[test_index],
+        )
+    
+        #Rain onsets: how many rain starts does the model predict?
+        y_pred_model = (evaluation["p_pred"] >= THRESHOLD).astype(int)
+        model_onset_recall = onset_recall(
+            now = data["PrecipIndicator"].loc[test_index],
+            y_true = indicator_nh.loc[test_index],
+            y_pred = y_pred_model,
+        )
 
         results.append({
         "Hours": hours,
         "ROC-AUC": evaluation["ROC-AUC"],
-        "Missed Rain": evaluation["MissedRain"],
-        "False Rain": evaluation["FalseRain"],
         "Accuracy": evaluation["Accuracy"],
-        "F1 Score": evaluation["F1_Score"]
+        "F1 Score": evaluation["F1_Score"],
+        "Brier": evaluation["Brier"],
+        "Persistence Accuracy": persistence_scores["Accuracy"],
+        "Persistence F1": persistence_scores["F1 Score"],
+        "Persistence Brier": persistence_scores["Brier"],
+        "Onset Recall": model_onset_recall
         })
         p_pred[hours] = evaluation["p_pred"]
         
@@ -101,7 +105,7 @@ def main():
         file.write("Model: Logistic Regression\n")
         file.write("Training period: 2000-2020\n")
         file.write("Test period: 2021-present\n")
-        file.write(f"Thresholds per horizon (hours: threshold): {thresholds}\n\n")
+        file.write(f"Threshold: THRESHOLD \n\n")
         file.write("Features:\n")
         for feature in features:
             file.write(f"  - {feature}\n")

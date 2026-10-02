@@ -9,21 +9,17 @@ def create_features(
 
     features_dict["DewPointSpread"] = data["Temperature"] - data["DewPoint"]
     features_dict["d_Temperature_3h"] = data["Temperature"].diff(3)
-    features_dict["d_Temperature_6h"] = data["Temperature"].diff(6)
     features_dict["Temperature"] = data["Temperature"]
     features_dict["d_NormalisedPressure_3h"] = data["NormalisedPressure"].diff(3)
-    features_dict["d_NormalisedPressure_6h"] = data["NormalisedPressure"].diff(6)
     features_dict["NormalisedPressure"] = data["NormalisedPressure"]
-    features_dict["d_RelativeHumidity_3h"] = data["RelativeHumidity"].diff(3)
-    features_dict["d_RelativeHumidity_6h"] = data["RelativeHumidity"].diff(6)
     features_dict["RelativeHumidity"] = data["RelativeHumidity"]
+    features_dict["d_RelativeHumidity_3h"] = data["RelativeHumidity"].diff(3)
     features_dict["DegOfCloudiness"] = data["DegOfCloudiness"]
     features_dict["MeanWindVeloc"] = data["MeanWindVeloc"]
     features_dict["PrecipIndicator"] = data["PrecipIndicator"]
     features_dict["d_DewPointSpread_3h"] = features_dict["DewPointSpread"].diff(3)
-    features_dict["d_DewPointSpread_6h"] = features_dict["DewPointSpread"].diff(6)
     features_dict["RollingDewPointSpread"] = features_dict["DewPointSpread"].rolling(3).mean()
-    features_dict["RollingTemp"] = features_dict["Temperature"].rolling(3).mean()
+
 
 
     df_features = pd.DataFrame(features_dict)
@@ -38,5 +34,5 @@ def create_features(
         dtype = int
     )
     df_features = pd.concat([df_features, month_dummies], axis = 1)
-    df_features.drop(columns = ["Month", "Season_F", "Season_S"], inplace = True)
+    df_features.drop(columns = "Month", inplace = True)
     return df_features
