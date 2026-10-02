@@ -53,7 +53,7 @@ def main():
        'd_NormalisedPressure_3h', 'NormalisedPressure',
        'd_RelativeHumidity_3h', 'DegOfCloudiness',
        'MeanWindVeloc', 'PrecipIndicator', 'Season_H',
-       'Season_W', "Season_S", "Season_F", "d_DewPointSpread_3h", "RollingDewPointSpread"]
+       'Season_W', "Season_F", "d_DewPointSpread_3h", "RollingDewPointSpread"]
     df_features = create_features(data)
     forecast_hours = HORIZONS
     results = []
@@ -105,7 +105,7 @@ def main():
         file.write("Model: Logistic Regression\n")
         file.write("Training period: 2000-2020\n")
         file.write("Test period: 2021-present\n")
-        file.write(f"Threshold: THRESHOLD \n\n")
+        file.write(f"Threshold: {THRESHOLD} \n\n")
         file.write("Features:\n")
         for feature in features:
             file.write(f"  - {feature}\n")

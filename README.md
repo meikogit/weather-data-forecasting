@@ -21,14 +21,10 @@ Die Frage öffnet möglichkeiten zu weiteren Forschungsfragen, wie "Verbessert e
 4. **Zeitliche Aufteilung:** Training bis 2020, Test ab 2021 (kein zufälliges Mischen, damit das Modell nicht "in die Zukunft schaut")
 5. **Vergleich:** Persistenz-Baseline auf exakt denselben Teststunden
 
-<!-- Ergänze oder streiche Punkte, je nachdem, was du wirklich gemacht hast. -->
-
 ## Ergebnis
 
-<!-- Hier die Zahlen aus deiner Tabelle eintragen (Spalten "F1 Score" und "Persistence F1").
-     Nur ein paar Horizonte reichen, z. B. 1, 3, 6, 12, 24 Stunden. -->
-
 | Horizont | F1 Modell | F1 Persistenz | Brier Modell | Brier Persistence | Onset Recall
+|---|---|---|---|---|---|
 | 1 h      |   [0.74]  |     [0.74]    |    [0.078]   |      [0.097]      |    [0.01]
 | 3 h      |   [0.57]  |     [0.56]    |    [0.111]   |      [0.165]      |    [0.17]
 | 6 h      |   [0.54]  |     [0.44]    |    [0.125]   |      [0.210]      |    [0.29]
@@ -68,7 +64,7 @@ src/
 ├── preprocessing.py   Daten bereinigen und zusammenführen
 ├── features.py        Features berechnen
 ├── logistic_model.py  Logistische Regression
-├── baselines.py       Persistenz-Baseline
+├── baseline.py       Persistenz-Baseline
 ├── evaluation.py      Bewertung (F1, Accuracy, ROC-AUC)
 └── main.py            startet alles
 ```
