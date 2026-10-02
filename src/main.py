@@ -13,12 +13,12 @@ from src.evaluation import evaluate_predictions
 def main():
 
     #Load and Preprocess Data
-    #One variable (e.g. "tu") can consist of several files (historical + recent).
-    #Each file is processed on its own, then the files of one variable are merged.
+    
     dfs = {}
-    for name, paths in group_files_by_variable(RAW_DIR).items():
-        parts = [preprocessing.process_df(load_data(path)) for path in paths]
-        dfs[name] = preprocessing.merge_files(parts)
+
+    for path in RAW_DIR.glob("produkt_*_stunde_*.txt"):
+        name = path.stem.split("produkt_")[1].split("_stunde")[0]
+        dfs[name] = preprocessing.process_df(load_data(path))
 
     #Clean the column names of each variable
     dfs["tu"] = preprocessing.clean_tu(dfs["tu"])
@@ -55,7 +55,7 @@ def main():
        'd_NormalisedPressure_3h', 'NormalisedPressure',
        'd_RelativeHumidity_3h', 'DegOfCloudiness',
        'MeanWindVeloc', 'PrecipIndicator', 'Season_H',
-       'Season_W', "d_DewPointSpread_3h", "RollingDewPointSpread"]
+       'Season_W', "Season_S", "Season_F" "d_DewPointSpread_3h", "RollingDewPointSpread"]
     df_features = create_features(data)
     forecast_hours = HORIZONS
     results = []

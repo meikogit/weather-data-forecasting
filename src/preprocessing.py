@@ -215,24 +215,6 @@ def clean_n(
         df.drop("V_N_I", axis = 1, inplace = True)
     return df  
 
-def merge_files(
-        dfs: list[pd.DataFrame]
-) -> pd.DataFrame:
-    """
-    Puts several files of the SAME variable (e.g. historical + recent
-    temperature file) below each other into one DataFrame.
-
-    The files overlap in time, so some hours exist twice. For those we keep
-    the first one. The list must be sorted from oldest to newest file, so
-    the older (quality-checked) file wins over the newer (preliminary) one.
-    """
-    df = pd.concat(dfs)
-    # kind="stable": rows with the same time stay in their original order,
-    # otherwise "keep first" could pick the wrong copy.
-    df = df.sort_index(kind="stable")
-    df = df[~df.index.duplicated(keep="first")]
-    return df
-
 
 def concat_columns(
         dfs: dict

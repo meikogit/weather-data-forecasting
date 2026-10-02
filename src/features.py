@@ -18,7 +18,6 @@ def create_features(
     features_dict["MeanWindVeloc"] = data["MeanWindVeloc"]
     features_dict["PrecipIndicator"] = data["PrecipIndicator"]
     features_dict["d_DewPointSpread_3h"] = features_dict["DewPointSpread"].diff(3)
-    features_dict["d_DewPointSpread_6h"] = features_dict["DewPointSpread"].diff(6)
     features_dict["RollingDewPointSpread"] = features_dict["DewPointSpread"].rolling(3).mean()
 
 
@@ -35,5 +34,5 @@ def create_features(
         dtype = int
     )
     df_features = pd.concat([df_features, month_dummies], axis = 1)
-    df_features.drop(columns = ["Month", "Season_F", "Season_S"], inplace = True)
+    df_features.drop(columns = "Month", inplace = True)
     return df_features

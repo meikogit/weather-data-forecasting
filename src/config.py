@@ -21,14 +21,6 @@ DATA_START = "2000-01-01"     # earlier years are not used
 # --- Forecast horizons (in hours) ---------------------------------------
 HORIZONS = [1, 2, 3, 4, 5, 6, 8, 12, 14, 16, 18, 24]
 
-# --- Time split ---------------------------------------------------------
-# Model is fitted on "train", decisions (features, threshold, settings) are
-# made on "validation", and "test" is looked at only once at the very end.
-# The split is always by time, never random.
-TRAIN_END = "2017-12-31"      # train:      DATA_START ... TRAIN_END
-VAL_END = "2023-12-31"        # validation: TRAIN_END  ... VAL_END
-TEST_END = None               # test:       VAL_END    ... TEST_END
-
-# --- Reproducibility ----------------------------------------------------
+# --- Constants ----------------------------------------------------
 SEED = 42
 THRESHOLD = 0.3
