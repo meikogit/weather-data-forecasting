@@ -21,12 +21,7 @@ Die Frage öffnet möglichkeiten zu weiteren Forschungsfragen, wie "Verbessert e
 4. **Zeitliche Aufteilung:** Training bis 2020, Test ab 2021 (kein zufälliges Mischen, damit das Modell nicht "in die Zukunft schaut")
 5. **Vergleich:** Persistenz-Baseline auf exakt denselben Teststunden
 
-<!-- Ergänze oder streiche Punkte, je nachdem, was du wirklich gemacht hast. -->
-
 ## Ergebnis
-
-<!-- Hier die Zahlen aus deiner Tabelle eintragen (Spalten "F1 Score" und "Persistence F1").
-     Nur ein paar Horizonte reichen, z. B. 1, 3, 6, 12, 24 Stunden. -->
 
 | Horizont | F1 Modell | F1 Persistenz | Brier Modell | Brier Persistence | Onset Recall
 | 1 h      |   [0.74]  |     [0.74]    |    [0.078]   |      [0.097]      |    [0.01]

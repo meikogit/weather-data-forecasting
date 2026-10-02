@@ -34,5 +34,5 @@ def create_features(
         dtype = int
     )
     df_features = pd.concat([df_features, month_dummies], axis = 1)
-    df_features.drop(columns = "Month", inplace = True)
+    df_features.drop(columns = ["Month", "Season_S"], inplace = True)
     return df_features
