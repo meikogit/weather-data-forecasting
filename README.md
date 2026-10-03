@@ -109,4 +109,4 @@ src/
 
 ## Hinweis zur Entwicklung
 
-Bei der Strukturierung des Projekts und beim Verständnis einzelner Konzepte habe ich KI-Assistenz (Claude) genutzt. Dabei habe ich den Code selbst geschrieben und mir lediglich Tipps und Verbesserungsvorschläge geholt, sowie neue Sachen erklären lassen. Die Notebooks, in denen Anfangs experimentiert wurde, wurden für die Übersichtlichkeit gelöscht.
+Bei der Strukturierung des Projekts und beim Verständnis einzelner Konzepte habe ich KI-Assistenz (Claude) genutzt. Dabei habe ich den Code größtenteils selbst geschrieben und mir hauptsächlich Tipps und Verbesserungsvorschläge geholt, sowie neue Sachen erklären lassen. Die Notebooks, in denen Anfangs experimentiert wurde, wurden für die Übersichtlichkeit gelöscht.

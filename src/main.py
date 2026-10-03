@@ -77,7 +77,7 @@ def main():
         #Evaluation Logistic Regression
         evaluation_logit = evaluate(data = df_features[features], indicator = indicator_nh, threshold = THRESHOLD, model = logit_model)
 
-        #Gradient Boosting
+        #Gradient Boosting Model
         grad_model = gradient_boosting(data = df_features, indicator = indicator_nh, features = features)
 
         #Evaluation Gradient Boosting
