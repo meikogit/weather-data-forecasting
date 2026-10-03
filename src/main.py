@@ -5,8 +5,9 @@ from src.evaluation import evaluate
 from src.logistic_model import logistic_reg
 import pandas as pd
 from src import preprocessing
-from src.baseline import persistence
+from src.baseline import persistence, climatology
 from src.evaluation import evaluate_predictions, onset_recall
+from sklearn.metrics import brier_score_loss
 
 def main():
 
@@ -58,6 +59,9 @@ def main():
     forecast_hours = HORIZONS
     results = []
     p_pred = {}
+    #Climatology baseline: same probabilities for every horizon, so compute once
+    p_clima = climatology(data)
+    
     
     for hours in forecast_hours:
         n = hours
@@ -73,7 +77,13 @@ def main():
         test_index = evaluation["p_pred"].index
         persistence_scores = evaluate_predictions(
             y_true = indicator_nh.loc[test_index],
-            y_pred = persistence(data).loc[test_index],
+            y_pred = persistence(data).loc[test_index]
+        )
+
+        #Climatology baseline (only Brier, because it gives probabilities)
+        climatology_brier = brier_score_loss(
+            indicator_nh.loc[test_index],
+            p_clima.loc[test_index]
         )
     
         #Rain onsets: how many rain starts does the model predict?
@@ -93,6 +103,7 @@ def main():
         "Persistence Accuracy": persistence_scores["Accuracy"],
         "Persistence F1": persistence_scores["F1 Score"],
         "Persistence Brier": persistence_scores["Brier"],
+        "Climatology Brier": climatology_brier,
         "Onset Recall": model_onset_recall
         })
         p_pred[hours] = evaluation["p_pred"]
