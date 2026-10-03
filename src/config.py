@@ -1,14 +1,11 @@
 """
-Central settings of the project.
+Zentrale einstellungen des Projekts
 
-Everything that is a decision (which station, which forecast horizons,
-where the data is split in time) lives here.
+Jede Entscheidung wie Stations-ID oder Start Datum steht hier 
 """
 from pathlib import Path
 
 # --- Folders -----------------------------------------------------------
-# PROJECT_ROOT is the folder that contains "src/". Using it means the code
-# finds its files no matter from which folder you start it.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RAW_DIR = PROJECT_ROOT / "data" / "raw"
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"

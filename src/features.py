@@ -3,7 +3,10 @@ import pandas as pd
 
 def create_features(
         data: pd.DataFrame
-):
+)-> pd.DataFrame:
+    """
+    Gibt ein DataFrame der ausgewählten Features zurück
+    """
     features_dict = {}
 
 

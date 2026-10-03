@@ -220,8 +220,7 @@ def concat_columns(
         dfs: dict
 ) -> pd.DataFrame:
     """
-    Puts the DataFrames of the different variables next to each other
-    (one column block per variable), matched by their time index.
+    Nimmt die DataFrames der verschiedenen Messgrößen und verbiendet sie zu einem
     """
     station_ids = {
        df["StationID"].iloc[0]
@@ -249,6 +248,9 @@ def concat_columns(
 def clean_structure(
         df: pd.DataFrame
 )-> pd.DataFrame:
+    """
+    Stellt die richtige Sortierung und Vollständigkeit des Index sicher
+    """
     df = df.copy()
     df = df.sort_index()
     df = df.asfreq("h")

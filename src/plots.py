@@ -11,6 +11,9 @@ def plot_brier(
     results_df: pd.DataFrame,
     path: Path    
 )-> None:
+    """
+    Plottet den Brier Score der verschiedenen Modelle
+    """
 
     fig, ax = plt.subplots(figsize = (8, 4.5))
     hours = results_df["Hours"]
@@ -32,7 +35,12 @@ def plot_brier(
     fig.savefig(path, dpi = 150)
     plt.close(fig)
 
-def plot_onset_recall(results_df: pd.DataFrame, path: Path) -> None:
+def plot_onset_recall(
+        results_df: pd.DataFrame, path: Path
+        ) -> None:
+    """
+    Plottet den Anteil der erkannten Regenbeginne von Gradient Boosting und Logistic Regression
+    """
     fig, ax = plt.subplots(figsize = (8, 4.5))
     hours = results_df["Hours"]
 
