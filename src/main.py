@@ -71,7 +71,7 @@ def main():
         n = hours
         indicator_nh = data["PrecipIndicator"].shift(-n)
 
-        #Logistic Regression
+        #Logistic Regression Model
         logit_model = logistic_reg(data = df_features, indicator = indicator_nh, features = features )
     
         #Evaluation Logistic Regression

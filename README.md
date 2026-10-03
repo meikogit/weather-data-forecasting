@@ -65,6 +65,7 @@ Die beiden Modelle sind in den ausgewählten Vergleichswerten ziemlich ähnlich.
 ### Beantwortung der Forschungsfrage
 
 ![Brier Score nach Horizont](data/results/brier_score.png)
+
 ![Onset Recall nach Horizont](data/results/onset_recall.png)
 
 Wie die Vergleichswerte und auch die Plots zeigen, ist das lineare Modell in einigen Aspekten besser als die Baselines. Der F1-Score zeigt, dass das Modell gemessen an Precision und Recall erst ab ca. 6 Stunden einen Vorteil gegenüber der Persistenz hat. Im Brier Score ist es schon ab der ersten Stunde besser. Das liegt aber auch daran, dass die Persistenz nur Wahrscheinlichkeiten von genau 0 oder 1 ausgibt, was beim Brier Score bei jedem Fehler hart bestraft wird. Das Modell hält sogar in vielen Kennwerten mit dem Gradient-Boosting-Modell mit und ist lediglich schlechter darin, Regenbeginne zu erkennen. Insgesamt ist also ein Mehrwert des linearen Modells zu erkennen, der durch weitere Anpassungen und Features noch ausgebaut werden könnte.
@@ -102,6 +103,7 @@ src/
 ├── gradient_boosting.py  Gradient Boosting
 ├── baseline.py           Persistenz- und Klimatologie-Baseline
 ├── evaluation.py         Bewertung (F1, Accuracy, ROC-AUC, Brier Score, Onset Recall)
+├── plots.py              Diagramme erstellen
 └── main.py               startet alles
 ```
 
