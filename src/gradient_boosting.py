@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingClassifier
+from src.config import SEED
 
 def gradient_boosting(
         data: pd.DataFrame,
@@ -17,6 +18,6 @@ def gradient_boosting(
     X_train = X.loc[:"2020", features]
     y_train = y.loc[:"2020"]
 
-    model = HistGradientBoostingClassifier().fit(X_train, y_train)
+    model = HistGradientBoostingClassifier(random_state = SEED).fit(X_train, y_train)
     return model
     

@@ -54,13 +54,13 @@ Das Gradient-Boosting-Modell zeigt gegenüber den Baselines ein sehr ähnliches 
 | Horizont | F1 Grad   | F1 Logit | Brier Grad | Brier Logit | Onset Recall Grad | Onset Recall Logit | ROC-AUC Grad | ROC-AUC Logit |
 |---|---|---|---|---|---|---|---|---|
 | 1 h      |   0.74    |   0.74   |   0.077    |    0.077    |       0.05        |       0.01         |     0.92     |     0.91      |
-| 3 h      |   0.57    |   0.57   |   0.110    |    0.111    |       0.23        |       0.17         |     0.85     |     0.84      |
-| 6 h      |   0.49    |   0.49   |   0.124    |    0.125    |       0.33        |       0.29         |     0.80     |     0.79      |
-| 12 h     |   0.43    |   0.42   |   0.133    |    0.134    |       0.35        |       0.31         |     0.75     |     0.74      |
-| 24 h     |   0.34    |   0.32   |   0.142    |    0.143    |       0.24        |       0.20         |     0.69     |     0.69      |
+| 3 h      |   0.57    |   0.57   |   0.110    |    0.111    |       0.24        |       0.17         |     0.85     |     0.84      |
+| 6 h      |   0.50    |   0.49   |   0.124    |    0.125    |       0.34        |       0.29         |     0.80     |     0.79      |
+| 12 h     |   0.43    |   0.42   |   0.133    |    0.134    |       0.36        |       0.31         |     0.75     |     0.74      |
+| 24 h     |   0.34    |   0.32   |   0.143    |    0.143    |       0.24        |       0.20         |     0.69     |     0.69      |
 
 **Interpretation:**
-Die beiden Modelle sind in den ausgewählten Vergleichswerten ziemlich ähnlich. Das Gradient-Boosting-Modell scheint überall minimal besser zu sein, allerdings müsste die Signifikanz dieses Unterschieds noch getestet werden. Der einzige interessante Unterschied zeigt sich beim Onset Recall, der den Anteil der erkannten Regenbeginne angibt: Hier hat das Gradient-Boosting-Modell 4 bis 6 Prozentpunkte mehr Regenbeginne vorhergesagt als das lineare Modell. Ein Grund dafür könnten nichtlineare Effekte sein, die das Boosting-Modell besser erfassen kann. Wie gut ein Modell Regen von Nicht-Regen unterscheiden kann, zeigt der ROC-AUC-Score. Er ist bei beiden Modellen nahezu identisch.
+Die beiden Modelle sind in den ausgewählten Vergleichswerten ziemlich ähnlich. Das Gradient-Boosting-Modell scheint fast überall minimal besser zu sein, allerdings müsste die Signifikanz dieses Unterschieds noch getestet werden. Der einzige interessante Unterschied zeigt sich beim Onset Recall, der den Anteil der erkannten Regenbeginne angibt: Hier hat das Gradient-Boosting-Modell 4 bis 6 Prozentpunkte mehr Regenbeginne vorhergesagt als das lineare Modell. Ein Grund dafür könnten nichtlineare Effekte sein, die das Boosting-Modell besser erfassen kann. Wie gut ein Modell Regen von Nicht-Regen unterscheiden kann, zeigt der ROC-AUC-Score. Er ist bei beiden Modellen nahezu identisch.
 
 ### Beantwortung der Forschungsfrage
 
