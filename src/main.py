@@ -3,6 +3,7 @@ from src.data_loader import load_data
 from src.features import create_features
 from src.evaluation import evaluate
 from src.logistic_model import logistic_reg
+from src.gradient_boosting import gradient_boosting
 import pandas as pd
 from src import preprocessing
 from src.baseline import persistence, climatology
@@ -58,7 +59,9 @@ def main():
     df_features = create_features(data)
     forecast_hours = HORIZONS
     results = []
-    p_pred = {}
+    p_pred_log = {}
+    p_pred_grad = {}
+
     #Climatology baseline: same probabilities for every horizon, so compute once
     p_clima = climatology(data)
     
@@ -70,11 +73,17 @@ def main():
         #Logistic Regression
         logit_model = logistic_reg(data = df_features, indicator = indicator_nh, features = features )
     
-                #Evaluation
-        evaluation = evaluate(data = df_features[features], indicator = indicator_nh, threshold = THRESHOLD, model = logit_model)
+        #Evaluation Logistic Regression
+        evaluation_logit = evaluate(data = df_features[features], indicator = indicator_nh, threshold = THRESHOLD, model = logit_model)
+
+        #Gradient Boosting
+        grad_model = gradient_boosting(data = df_features, indicator = indicator_nh, features = features)
+
+        #Evaluation Gradient Boosting
+        evaluation_grad = evaluate(data = df_features[features], indicator = indicator_nh, threshold = THRESHOLD, model = grad_model)
 
         #Persistence baseline 
-        test_index = evaluation["p_pred"].index
+        test_index = evaluation_logit["p_pred"].index
         persistence_scores = evaluate_predictions(
             y_true = indicator_nh.loc[test_index],
             y_pred = persistence(data).loc[test_index]
@@ -87,26 +96,38 @@ def main():
         )
     
         #Rain onsets: how many rain starts does the model predict?
-        y_pred_model = (evaluation["p_pred"] >= THRESHOLD).astype(int)
-        model_onset_recall = onset_recall(
+        y_pred_log = (evaluation_logit["p_pred"] >= THRESHOLD).astype(int)
+        model_onset_recall_log = onset_recall(
             now = data["PrecipIndicator"].loc[test_index],
             y_true = indicator_nh.loc[test_index],
-            y_pred = y_pred_model,
+            y_pred = y_pred_log,
         )
+
+        y_pred_grad = (evaluation_grad["p_pred"] >= THRESHOLD).astype(int)
+        model_onset_recall_grad = onset_recall(
+            now = data["PrecipIndicator"].loc[test_index],
+            y_true = indicator_nh.loc[test_index],
+            y_pred = y_pred_grad,
+        )
+
 
         results.append({
         "Hours": hours,
-        "ROC-AUC": evaluation["ROC-AUC"],
-        "Accuracy": evaluation["Accuracy"],
-        "F1 Score": evaluation["F1_Score"],
-        "Brier": evaluation["Brier"],
+        "ROC-AUC_log": evaluation_logit["ROC-AUC"],
+        "ROC-AUC_grad": evaluation_grad["ROC-AUC"],
+        "F1 Score_log": evaluation_logit["F1_Score"],
+        "F1 Score_grad": evaluation_grad["F1_Score"],
+        "Brier_log": evaluation_logit["Brier"],
+        "Brier_grad": evaluation_grad["Brier"],
         "Persistence Accuracy": persistence_scores["Accuracy"],
         "Persistence F1": persistence_scores["F1 Score"],
         "Persistence Brier": persistence_scores["Brier"],
         "Climatology Brier": climatology_brier,
-        "Onset Recall": model_onset_recall
+        "Onset Recall_log": model_onset_recall_log,
+        "Onset Recall_grad": model_onset_recall_grad
         })
-        p_pred[hours] = evaluation["p_pred"]
+        p_pred_log[hours] = evaluation_logit["p_pred"]
+        p_pred_grad[hours] = evaluation_grad["p_pred"]
         
     results_df = pd.DataFrame(results)
     RESULTS_DIR.mkdir(parents = True, exist_ok = True)

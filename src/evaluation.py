@@ -1,6 +1,8 @@
 import statsmodels.api as sm 
 import pandas as pd
 from sklearn.metrics import confusion_matrix, roc_auc_score, accuracy_score, f1_score, brier_score_loss
+from statsmodels.discrete.discrete_model import BinaryResultsWrapper
+
 
 
 def evaluate(
@@ -19,9 +21,13 @@ def evaluate(
     X_test = test_data.drop(columns="target")
     y_test = test_data["target"]
 
-    X_test = sm.add_constant(X_test)
+    if type(model) == BinaryResultsWrapper:
+        X_test = sm.add_constant(X_test)
+        p_pred = model.predict(X_test)
+        evaluation["Summary"] = model.summary()
+    else:
+        p_pred = pd.Series(model.predict_proba(X_test)[:, 1], index = X_test.index)
 
-    p_pred = model.predict(X_test)
     y_pred = (p_pred >= threshold).astype(int)
     
     matrix = confusion_matrix(y_test, y_pred)
@@ -40,7 +46,6 @@ def evaluate(
 
     f1 = f1_score(y_test, y_pred)
 
-    evaluation["Summary"] = model.summary()
     evaluation["Accuracy"] = accuracy
     evaluation["RainRecall"] = rain_recall
     evaluation["RainPrecision"] = rain_precision
