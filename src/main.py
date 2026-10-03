@@ -9,6 +9,7 @@ from src import preprocessing
 from src.baseline import persistence, climatology
 from src.evaluation import evaluate_predictions, onset_recall
 from sklearn.metrics import brier_score_loss
+from src.plots import plot_brier, plot_onset_recall
 
 def main():
 
@@ -131,6 +132,8 @@ def main():
         
     results_df = pd.DataFrame(results)
     RESULTS_DIR.mkdir(parents = True, exist_ok = True)
+    plot_brier(results_df, RESULTS_DIR / "brier_score.png")
+    plot_onset_recall(results_df, RESULTS_DIR / "onset_recall.png")
     with open(RESULTS_DIR / "results_logistic_reg.txt", "w") as file:
         file.write("LOGISTIC REGRESSION - FORECAST HORIZON EVALUATION\n")
         file.write("=" * 70 + "\n\n")
