@@ -7,6 +7,9 @@ def gradient_boosting(
         features: list,
         indicator: pd.Series
     ):
+    """
+    Gibt das Gradient Boosting Modell gefittet auf die Trainingsdaten zurück
+    """
     data_model = pd.concat(
             [data[features], indicator.rename("target")], axis = 1
             )

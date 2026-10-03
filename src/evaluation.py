@@ -11,6 +11,10 @@ def evaluate(
         threshold: int,
         model,
     )->dict:
+    """
+    Evaluiert das Modell indem es die vorhergsagten 
+    Regenwahrscheinlichkeiten bestimmt und einige Vergleichswerte berechnet
+    """
     evaluation = {}
     data_model = pd.concat(
     [data, indicator.rename("target")],
@@ -64,8 +68,7 @@ def evaluate_predictions(
         y_pred: pd.Series,
 ) -> dict:
     """
-    Scores a 0/1 forecast against what really happened.
-    Works for every forecast.
+    Evaluierung der Persistenz
     """
 
     f1 = f1_score(y_true, y_pred)
@@ -82,8 +85,7 @@ def onset_recall(
         y_pred: pd.Series,
 ) -> float:
     """
-    Share of rain onsets (dry now, rain later) that the forecast predicts.
-    Persistence always scores 0 here.
+    Anteil der erkannten Regenbeginne (Persistenz ist hier per Definition 0)
     """
     onset = (now == 0) & (y_true == 1)
     return y_pred[onset].mean()

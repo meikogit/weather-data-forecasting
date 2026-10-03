@@ -7,6 +7,9 @@ def logistic_reg(
         features: list,
         indicator: pd.Series
 ):
+    """
+    Gibt das Logistosche Regressions Modell zurück, gefittet auf Trainingsdaten
+    """
     data_model = pd.concat(
         [data[features], indicator.rename("target")], axis = 1
         )
