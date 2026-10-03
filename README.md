@@ -42,9 +42,9 @@ Die Ergebnisse zeigen, dass mein Modell gemessen am F1-Score bei einer und drei 
 |---|---|---|---|---|---|
 | 1 h      |   0.74    |     0.74      |    0.077     |      0.097        |       0.149        |
 | 3 h      |   0.57    |     0.56      |    0.110     |      0.165        |       0.149        |
-| 6 h      |   0.49    |     0.44      |    0.124     |      0.210        |       0.149        |
+| 6 h      |   0.50    |     0.44      |    0.124     |      0.210        |       0.149        |
 | 12 h     |   0.43    |     0.34      |    0.133     |      0.248        |       0.149        |
-| 24 h     |   0.34    |     0.27      |    0.142     |      0.273        |       0.149        |
+| 24 h     |   0.34    |     0.27      |    0.143     |      0.273        |       0.149        |
 
 **Interpretation:**
 Das Gradient-Boosting-Modell zeigt gegenüber den Baselines ein sehr ähnliches Verhalten wie die logistische Regression. Im Vergleich mit den Baselines gibt es also zunächst keinen zusätzlichen Vorteil.
@@ -60,11 +60,14 @@ Das Gradient-Boosting-Modell zeigt gegenüber den Baselines ein sehr ähnliches 
 | 24 h     |   0.34    |   0.32   |   0.143    |    0.143    |       0.24        |       0.20         |     0.69     |     0.69      |
 
 **Interpretation:**
-Die beiden Modelle sind in den ausgewählten Vergleichswerten ziemlich ähnlich. Das Gradient-Boosting-Modell scheint fast überall minimal besser zu sein, allerdings müsste die Signifikanz dieses Unterschieds noch getestet werden. Der einzige interessante Unterschied zeigt sich beim Onset Recall, der den Anteil der erkannten Regenbeginne angibt: Hier hat das Gradient-Boosting-Modell 4 bis 6 Prozentpunkte mehr Regenbeginne vorhergesagt als das lineare Modell. Ein Grund dafür könnten nichtlineare Effekte sein, die das Boosting-Modell besser erfassen kann. Wie gut ein Modell Regen von Nicht-Regen unterscheiden kann, zeigt der ROC-AUC-Score. Er ist bei beiden Modellen nahezu identisch.
+Die beiden Modelle sind in den ausgewählten Vergleichswerten ziemlich ähnlich. Das Gradient-Boosting-Modell scheint überall minimal besser oder gleich gut zu sein, allerdings müsste die Signifikanz dieses Unterschieds noch getestet werden. Der einzige interessante Unterschied zeigt sich beim Onset Recall, der den Anteil der erkannten Regenbeginne angibt: Hier hat das Gradient-Boosting-Modell 4 bis 7 Prozentpunkte mehr Regenbeginne vorhergesagt als das lineare Modell. Ein Grund dafür könnten nichtlineare Effekte sein, die das Boosting-Modell besser erfassen kann. Wie gut ein Modell Regen von Nicht-Regen unterscheiden kann, zeigt der ROC-AUC-Score. Er ist bei beiden Modellen nahezu identisch.
 
 ### Beantwortung der Forschungsfrage
 
-Wie die Vergleichswerte zeigen, ist mein lineares Modell in einigen Aspekten besser als die Baselines. Der F1-Score zeigt, dass das Modell gemessen an Precision und Recall erst ab ca. 6 Stunden einen Vorteil gegenüber der Persistenz hat. Im Brier Score ist es schon ab der ersten Stunde besser. Das liegt aber auch daran, dass die Persistenz nur Wahrscheinlichkeiten von genau 0 oder 1 ausgibt, was beim Brier Score bei jedem Fehler hart bestraft wird. Das Modell hält sogar in vielen Kennwerten mit dem Gradient-Boosting-Modell mit und ist lediglich schlechter darin, Regenbeginne zu erkennen. Insgesamt ist also ein Mehrwert des linearen Modells zu erkennen, der durch weitere Anpassungen und Features noch ausgebaut werden kann.
+![Brier Score nach Horizont](data/results/brier_score.png)
+![Onset Recall nach Horizont](data/results/onset_recall.png)
+
+Wie die Vergleichswerte und auch die Plots zeigen, ist das lineare Modell in einigen Aspekten besser als die Baselines. Der F1-Score zeigt, dass das Modell gemessen an Precision und Recall erst ab ca. 6 Stunden einen Vorteil gegenüber der Persistenz hat. Im Brier Score ist es schon ab der ersten Stunde besser. Das liegt aber auch daran, dass die Persistenz nur Wahrscheinlichkeiten von genau 0 oder 1 ausgibt, was beim Brier Score bei jedem Fehler hart bestraft wird. Das Modell hält sogar in vielen Kennwerten mit dem Gradient-Boosting-Modell mit und ist lediglich schlechter darin, Regenbeginne zu erkennen. Insgesamt ist also ein Mehrwert des linearen Modells zu erkennen, der durch weitere Anpassungen und Features noch ausgebaut werden könnte.
 
 ## Grenzen
 
@@ -104,4 +107,4 @@ src/
 
 ## Hinweis zur Entwicklung
 
-Bei der Strukturierung des Projekts und beim Verständnis einzelner Konzepte habe ich KI-Assistenz (Claude) genutzt. Dabei habe ich den Code selbst geschrieben und mir lediglich Tipps und Verbesserungsvorschläge geholt. Die Notebooks, in denen experimentiert wurde, wurden für die Übersichtlichkeit gelöscht.
+Bei der Strukturierung des Projekts und beim Verständnis einzelner Konzepte habe ich KI-Assistenz (Claude) genutzt. Dabei habe ich den Code selbst geschrieben und mir lediglich Tipps und Verbesserungsvorschläge geholt, sowie neue Sachen erklären lassen. Die Notebooks, in denen Anfangs experimentiert wurde, wurden für die Übersichtlichkeit gelöscht.
